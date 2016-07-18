@@ -1,0 +1,105 @@
+package cs355.view;
+
+import cs355.model.drawing.*;
+import cs355.model.drawing.Rectangle;
+import cs355.model.drawing.Shape;
+
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+
+/**
+ * atan2(p2 * x, -p2 * y)
+ * use bounding boxes.
+ * <p>
+ * Created by liukaichi on 9/4/2015.
+ */
+public abstract class DrawableShape
+{
+
+    public abstract java.awt.Shape GenerateDrawableShape(Shape shape);
+
+    class DrawableSquare extends DrawableShape
+    {
+
+        @Override public java.awt.Shape GenerateDrawableShape(Shape shape)
+        {
+            Square square = ((Square) shape);
+            Point2D.Double center = square.getCenter();
+            double size = square.getSize();
+            return new Rectangle2D.Double(center.getX() - size / 2, center.getY() - size / 2, size, size);
+        }
+    }
+
+    class DrawableCircle extends DrawableShape
+    {
+
+        @Override public java.awt.Shape GenerateDrawableShape(Shape shape)
+        {
+
+            Circle circle = ((Circle) shape);
+            Point2D center = circle.getCenter();
+            double radius = circle.getRadius();
+            return new Ellipse2D.Double(center.getX() - radius, center.getY() - radius, radius * 2, radius * 2);
+
+        }
+    }
+
+    class DrawableEllipse extends DrawableShape
+    {
+
+        @Override public java.awt.Shape GenerateDrawableShape(Shape shape)
+        {
+            Ellipse ellipse = ((Ellipse) shape);
+            Point2D center = ellipse.getCenter();
+            double height = ellipse.getHeight();
+            double width = ellipse.getWidth();
+
+            return new Ellipse2D.Double(center.getX() - width / 2, center.getY() - height / 2, width, height);
+
+        }
+    }
+
+    class DrawableLine extends DrawableShape
+    {
+
+        @Override public java.awt.Shape GenerateDrawableShape(Shape shape)
+        {
+            Line line = ((Line) shape);
+            Point2D start = line.getCenter();
+            Point2D end = line.getEnd();
+            System.out.println("Generated Drawable Line!");
+            return new Line2D.Double(start, end);
+
+        }
+    }
+
+    class DrawableRectangle extends DrawableShape
+    {
+
+        @Override public java.awt.Shape GenerateDrawableShape(Shape shape)
+        {
+            Rectangle rectangle = ((Rectangle) shape);
+            Point2D.Double center = rectangle.getCenter();
+            double height = rectangle.getHeight();
+            double width = rectangle.getWidth();
+            return new Rectangle2D.Double(center.getX() - width / 2, center.getY() - height / 2, width, height);
+        }
+    }
+
+    class DrawableTriangle extends DrawableShape
+    {
+
+        @Override public java.awt.Shape GenerateDrawableShape(Shape shape)
+        {
+            Triangle triangle = ((Triangle) shape);
+            Polygon newTriangle = new Polygon();
+            newTriangle.addPoint((int) triangle.getA().getX(), (int) triangle.getA().getY());
+            newTriangle.addPoint((int) triangle.getB().getX(), (int) triangle.getB().getY());
+            newTriangle.addPoint((int) triangle.getC().getX(), (int) triangle.getC().getY());
+            return newTriangle;
+        }
+    }
+}
